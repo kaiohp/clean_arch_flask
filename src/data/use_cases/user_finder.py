@@ -1,6 +1,7 @@
 from src.data.interfaces.users_repository import UsersRepositoryInterface
 from src.domain.models.users import Users
 from src.domain.use_cases.user_finder import UserFinder as UserFinderInterface
+from src.erros.types import HttpBadRequestError, HttpNotFoundError
 
 
 class UserFinder(UserFinderInterface):
@@ -21,17 +22,17 @@ class UserFinder(UserFinderInterface):
         FIRST_NAME_MAX_LENGHT = 18
 
         if not first_name.isalpha():
-            raise Exception('Invalid first name to find')
+            raise HttpBadRequestError('Invalid first name to find')
 
         if len(first_name) > FIRST_NAME_MAX_LENGHT:
-            raise Exception(
+            raise HttpBadRequestError(
                 'First name exceed the 18 characteres maximum lenght'
             )
 
     def __search_user_by_first_name(self, first_name: str) -> list:
         users = self.__users_repository.get_user_by_first_name(first_name)
         if not users:
-            raise Exception('User dont find.')
+            raise HttpNotFoundError('User dont find.')
         return users
 
     @classmethod

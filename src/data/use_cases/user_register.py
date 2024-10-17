@@ -4,6 +4,7 @@ from src.data.interfaces.users_repository import UsersRepositoryInterface
 from src.domain.use_cases.user_register import (
     UserRegister as UserRegisterInterface,
 )
+from src.erros.types import HttpBadRequestError, HttpInternalServerError
 
 
 class UserRegister(UserRegisterInterface):
@@ -30,15 +31,17 @@ class UserRegister(UserRegisterInterface):
         NAME_MAX_LENGHT = 18
 
         if not name.isalpha():
-            raise Exception('Invalid characteres on name')
+            raise HttpBadRequestError('Invalid characteres on name')
 
         if len(name) > NAME_MAX_LENGHT:
-            raise Exception('Name exceed the 18 characteres maximum lenght')
+            raise HttpBadRequestError(
+                'Name exceed the 18 characteres maximum lenght'
+            )
 
     @classmethod
     def __validate_birth_date(cls, birth_date: date):
         if birth_date > date.today():
-            raise Exception('Birth date cannot be in the future')
+            raise HttpBadRequestError('Birth date cannot be in the future')
 
     def __registry_user(
         self, first_name: str, last_name: str, birth_date: date
@@ -48,7 +51,7 @@ class UserRegister(UserRegisterInterface):
         )
 
         if inserted_user_id is None:
-            raise Exception('Cannot insert user on database')
+            raise HttpInternalServerError('Cannot insert user on database')
 
         return inserted_user_id
 
