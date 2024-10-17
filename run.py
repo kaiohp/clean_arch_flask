@@ -1,3 +1,4 @@
+from src.infra.db import create_tables  # noqa: F401
 from src.main.server.server import app
 
 if __name__ == '__main__':
