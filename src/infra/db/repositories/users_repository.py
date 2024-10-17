@@ -1,12 +1,15 @@
 from datetime import date
 
+from src.data.interfaces.users_repository import UsersRepositoryInterface
 from src.infra.db.connection import DBConnectionHandler
 from src.infra.db.models.users import Users as UsersEntity
 
 
-class UsersRepository:
+class UsersRepository(UsersRepositoryInterface):
     @classmethod
-    def insert_user(cls, first_name: str, last_name: str, birth_date: date):
+    def insert_user(
+        cls, first_name: str, last_name: str, birth_date: date
+    ) -> int:
         with DBConnectionHandler() as session:
             try:
                 new_user = UsersEntity(
@@ -23,7 +26,7 @@ class UsersRepository:
                 raise exception
 
     @classmethod
-    def get_user_by_first_name(cls, first_name: str):
+    def get_user_by_first_name(cls, first_name: str) -> list[UsersEntity]:
         with DBConnectionHandler() as session:
             try:
                 users = (
