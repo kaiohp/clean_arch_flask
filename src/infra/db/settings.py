@@ -1,5 +1,6 @@
 from functools import cache
 
+from pydantic import computed_field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from sqlalchemy import URL
 
@@ -16,11 +17,14 @@ class Settings(BaseSettings):
     database_username: str = 'postgres'
     database_name: str = 'postgres'
 
-    url: URL = URL.create(
-        'postgresql+psycopg',
-        username=database_username,
-        password=database_password,
-        host=database_hostname,
-        port=database_port,
-        database=database_name,
-    )
+    @computed_field
+    @property
+    def url(self) -> URL:
+        return URL.create(
+            'postgresql+psycopg',
+            username=self.database_username,
+            password=self.database_password,
+            host=self.database_hostname,
+            port=self.database_port,
+            database=self.database_name,
+        )
