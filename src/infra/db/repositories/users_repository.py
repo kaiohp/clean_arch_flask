@@ -1,7 +1,7 @@
 from datetime import date
 
 from src.infra.db.connection import DBConnectionHandler
-from src.models.users import Users as UsersEntity
+from src.infra.db.models.users import Users as UsersEntity
 
 
 class UsersRepository:
