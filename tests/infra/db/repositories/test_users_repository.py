@@ -1,8 +1,8 @@
 from datetime import date
 
 from src.infra.db.connection import DBConnectionHandler
-from src.models.users import Users
-from src.repositories.users_repository import UsersRepository
+from src.infra.db.models.users import Users
+from src.infra.db.repositories.users_repository import UsersRepository
 
 
 def test_insert_user():
